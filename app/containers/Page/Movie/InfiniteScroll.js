@@ -1,90 +1,113 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
 import fetch from 'isomorphic-fetch';
+
+import { loadConfig, loadMovies } from 'redux/actions/movies';
+import injectReducer from 'utils/injectReducer';
+import injectSaga from 'utils/injectSaga';
 
 import { Row, LeftSide__col3, LeftSide__col7 } from 'components/Grid';
 import MainContainer from 'components/MainContainer';
 import ImageList from 'components/ImageList';
+import SLiderContent from 'components/Slider';
+import Inf from './inf';
 
-class InfiniteScroll extends Component{
-  state = {
-    results: [],
-    config:{},
-    page: 1,
-    totalPages: null,
-    scrolling: false,
-  }
-  componentWillMount() {
-    this.loadConfig()
-    this.loadMovie()
-    this.scrollListener = window.addEventListener('scroll', (e) => {
-      this.handleScroll(e)
-    });
-  }
-  handleScroll = () => {
-    const { scrolling, totalPages, page} = this.state
-    if (scrolling) return
-    if (totalPages <= page) return
-    var lastLi = document.querySelector('ul.list li.item:last-of-type')
-    var lastLiOffset = lastLi.offsetTop + lastLi.clientHeight
-    var pageOffset = window.pageYOffset + window.innerHeight
-    var bottomOffset = 20
-    if (pageOffset > lastLiOffset - bottomOffset) {
-      this.loadMore()
-    }
+import configSaga from './configSaga';
+import { configReducer } from './configReducer';
 
+import {
+  makeSelectMoviesLoading,
+  makeSelectMoviesError,
+  selectConfig,
+  makeSelectConfig,
+  makeSelectResults,
+  makeSelectTotalPages,
+  makeSelectTotalResults,
+} from './selectors';
+
+class InfiniteScroll extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      page: 1,
+      hasMoreItems: true,
+      results: [],
+      loading: true,
+      scrolling: false,
+    };
   }
-  loadConfig = () => {
-    const KEY = '?api_key=7d711d94f2f7f57e099b7b4ac6cbd56e';
-    const URL = 'https://api.themoviedb.org';
-    const urlConfig = `${URL}/3/configuration${KEY}`;
-    fetch(urlConfig)
-      .then(response => response.json())
-      .then(json => this.setState({
-        config: json,
-      }));
+
+  componentDidMount() {
+    this.props.loadConfig();
+    this.props.loadMovies(this.state.page);
   }
-  loadMovie = () => {
-    const {results, page, config} = this.state
-    const KEY = '?api_key=7d711d94f2f7f57e099b7b4ac6cbd56e'
-    const URL = 'https://api.themoviedb.org'
-    const urlList = `${URL}/3/discover/movie${KEY}&page=${page}&year=2018`
-    fetch(urlList)
-      .then(response => response.json())
-      .then(json => this.setState({
-        results: [...results, ...json.results],
-        scrolling: false,
-        totalPages: json.total_pages,
-      }))
-  }
-  loadMore = () => {
-    this.setState(prevState => ({
-      page: prevState.page+1,
-      scrolling: true,
-    }), this.loadMovie)
-  }
-  render(){
-    console.log('config', this.state.config)
-    console.log('results', this.state.results)
-    return(
+
+  render() {
+    const {
+      loading,
+      error,
+      config,
+      results,
+      totalPages,
+      totalResults,
+    } = this.props;
+
+    return (
       <MainContainer>
         <div>
-          i
+          <SLiderContent results={results.slice(0, 5)} config={config} />
         </div>
         <Row>
-          <LeftSide__col3>
-          j
-          </LeftSide__col3>
+          <LeftSide__col3>j</LeftSide__col3>
           <LeftSide__col7>
-            <ul className="list">
-              <ImageList images={this.state.results} config={this.state.config}/>
-              <a onClick={this.loadMore}>Load more</a>
-            </ul>
+            <Inf />
           </LeftSide__col7>
         </Row>
       </MainContainer>
-
-    )
+    );
   }
 }
 
-export default InfiniteScroll;
+InfiniteScroll.propTypes = {
+  config: PropTypes.shape({
+    images: PropTypes.shape({
+      backdrop_sizes: PropTypes.array,
+      secure_base_url: PropTypes.string,
+    }),
+  }),
+  loading: PropTypes.bool,
+  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+};
+
+const mapStateToProps = createStructuredSelector({
+  config: makeSelectConfig(),
+  loading: makeSelectMoviesLoading(),
+  error: makeSelectMoviesError(),
+  results: makeSelectResults(),
+  totalPages: makeSelectTotalPages(),
+  totalResults: makeSelectTotalResults(),
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadConfig: () => dispatch(loadConfig()),
+  loadMovies: page => dispatch(loadMovies(page)),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+const withReducer = injectReducer({ key: 'config', reducer: configReducer });
+const withSaga = injectSaga({ key: 'config', saga: configSaga });
+
+export default compose(
+  withReducer,
+  withSaga,
+  withConnect,
+)(InfiniteScroll);

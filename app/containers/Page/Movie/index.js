@@ -10,6 +10,7 @@ import ImageList from 'components/ImageList';
 import { loadConfig, loadMovies } from 'redux/actions/movies';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
+import SLiderContent from 'components/Slider';
 import { configReducer } from './configReducer';
 import configSaga from './configSaga';
 
@@ -96,14 +97,18 @@ class MoviePage extends Component {
       totalPages,
       totalResults,
     } = this.props;
+
     console.log(this.props);
     console.log('results ini', this.state.results);
     if (loading == true && config !== undefined) return null;
     return (
-      <ul className="list">
-        <ImageList images={results} config={config} />
-        <a onClick={this.loadMore.bind(this)}>Load more</a>
-      </ul>
+      <div>
+        <SLiderContent results={results.slice(0, 5)} config={config} />
+        <ul className="list">
+          <ImageList images={results} config={config} />
+          <a onClick={this.loadMore.bind(this)}>Load more</a>
+        </ul>
+      </div>
     );
   }
 }
