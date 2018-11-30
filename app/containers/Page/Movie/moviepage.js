@@ -5,20 +5,15 @@ import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
-import fetch from 'isomorphic-fetch';
 
+import ImageList from 'components/ImageList';
 import { loadConfig, loadMovies } from 'redux/actions/movies';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
-
-import { Row, LeftSide__col3, LeftSide__col7 } from 'components/Grid';
-import MainContainer from 'components/MainContainer';
-import ImageList from 'components/ImageList';
 import SLiderContent from 'components/Slider';
-import Inf from './inf';
-
-import configSaga from './configSaga';
 import { configReducer } from './configReducer';
+import configSaga from './configSaga';
+
 
 import {
   makeSelectMoviesLoading,
@@ -30,7 +25,7 @@ import {
   makeSelectTotalResults,
 } from './selectors';
 
-class InfiniteScroll extends Component {
+class MoviePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,11 +35,56 @@ class InfiniteScroll extends Component {
       loading: true,
       scrolling: false,
     };
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
     this.props.loadConfig();
-    this.props.loadMovies(this.state.page);
+    this.loadList();
+  }
+
+  componentWillMount() {
+    this.scrollListener = window.addEventListener('scroll', e => {
+      this.handleScroll(e);
+    });
+  }
+
+  componentWillUnmount() {
+    this.scrollListener = window.removeEventListener('scroll', e => {
+      this.handleScroll(e);
+    });
+  }
+
+  handleScroll = () => {
+    const { scrolling, page } = this.state;
+    const { totalPages, totalResults } = this.props;
+    if (scrolling) return;
+    if (totalPages <= page) return;
+    const lastLi = document.querySelector('ul.list li.item:last-of-type');
+    const lastLiOffset = lastLi.offsetTop + lastLi.clientHeight;
+    const pageOffset = window.pageYOffset + window.innerHeight;
+    const bottomOffset = 20;
+    if (pageOffset > lastLiOffset - bottomOffset) {
+      this.loadMore();
+    }
+  };
+
+  loadList() {
+    const { page } = this.state;
+    this.props.loadMovies(page);
+    // this.setState((prevState, props) => ({
+    //   results: [...prevState.results , ...props.results],
+    //   loading: props.loading,
+    // }));
+  }
+
+  loadMore() {
+    this.setState(
+      prevState => ({
+        page: prevState.page + 1,
+      }),
+      this.loadList,
+    );
   }
 
   render() {
@@ -57,23 +97,22 @@ class InfiniteScroll extends Component {
       totalResults,
     } = this.props;
 
+    console.log(this.props);
+    console.log('results ini', this.state.results);
+    if (loading == true && config !== undefined) return null;
     return (
-      <MainContainer>
-        <div>
-          <SLiderContent results={results.slice(0, 5)} config={config} />
-        </div>
-        <Row>
-          <LeftSide__col3>j</LeftSide__col3>
-          <LeftSide__col7>
-            <Inf />
-          </LeftSide__col7>
-        </Row>
-      </MainContainer>
+      <div>
+        <SLiderContent results={results.slice(0, 5)} config={config} />
+        <ul className="list">
+          <ImageList images={results} config={config} />
+          <a onClick={this.loadMore.bind(this)}>Load more</a>
+        </ul>
+      </div>
     );
   }
 }
 
-InfiniteScroll.propTypes = {
+MoviePage.propTypes = {
   config: PropTypes.shape({
     images: PropTypes.shape({
       backdrop_sizes: PropTypes.array,
@@ -110,4 +149,4 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(InfiniteScroll);
+)(MoviePage);
