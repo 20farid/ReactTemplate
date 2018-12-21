@@ -10,21 +10,14 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 // import { Switch, Route } from 'react-router-dom';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
 import FrontPage from 'containers/FrontPage/index';
-import FeaturePage from 'containers/FeaturePage/Loadable';
+import MoviePage from 'containers/Page/Movie/moviepage';
+import MovieInfinite from 'containers/Page/Movie';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
-
-import MoviePage from 'containers/Page/Movie/moviepage';
-import MovieInfinite from 'containers/Page/Movie/index';
 
 import GlobalStyle from '../../global-styles';
 
@@ -62,7 +55,6 @@ export default function App() {
           <Route path="/mov" component={MovieInfinite} />
           <Route path="/movies" component={MoviePage} />
           <Route path="" component={NotFoundPage} />
-
         </Switch>
         <GlobalStyle />
       </AppWrapper>
