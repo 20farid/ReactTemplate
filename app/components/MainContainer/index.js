@@ -6,6 +6,8 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Row } from 'components/Grid';
+import Header from 'components/Header';
+import Footer from 'components/Footer';
 
 const Wraper = styled.div`
   position: relative;
@@ -25,10 +27,15 @@ const RightSide = styled.div`
 
 const MainContainer = props => (
   <Wraper>
-    <Row>
-      <LeftSide>{props.children}</LeftSide>
-      <RightSide>{/* <WidgetRight> */}</RightSide>
-    </Row>
+    <Header />
+    <main>
+      {props.children}
+      {/*<Row>
+        <LeftSide></LeftSide>
+        <RightSide></RightSide>
+      </Row>*/}
+    </main>
+    <Footer />
   </Wraper>
 );
 MainContainer.propTypes = {

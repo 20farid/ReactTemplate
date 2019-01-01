@@ -1,0 +1,9 @@
+const REGISTER = {
+    REQUEST : 'REGISTER_REQUEST',
+    SUCCESS : 'REGISTER_SUCCESS',
+    FAIL : 'REGISTER_FAIL'
+};
+
+export {
+  REGISTER
+};

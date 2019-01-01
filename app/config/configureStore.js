@@ -7,7 +7,7 @@ import { fromJS } from 'immutable';
 import { routerMiddleware } from 'connected-react-router/immutable';
 import createSagaMiddleware from 'redux-saga';
 import createReducer from 'redux/createReducers';
-import rootSaga from 'redux/saga';
+import rootSaga from 'redux/rootSaga';
 
 const sagaMiddleware = createSagaMiddleware();
 

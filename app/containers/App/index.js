@@ -16,8 +16,10 @@ import FrontPage from 'containers/FrontPage/index';
 import MoviePage from 'containers/Page/Movie/moviepage';
 import MovieInfinite from 'containers/Page/Movie';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import Header from 'components/Header';
-import Footer from 'components/Footer';
+
+// Accounts component
+import SignupPage from 'containers/account/SignUp';
+
 
 import GlobalStyle from '../../global-styles';
 
@@ -49,11 +51,11 @@ export default function App() {
         <Helmet titleTemplate="Okezone" defaultTitle="Okezone">
           <meta name="description" content="Okezone" />
         </Helmet>
-        <Header />
         <Switch>
           <Route exact path="/" component={FrontPage} />
           <Route path="/mov" component={MovieInfinite} />
           <Route path="/movies" component={MoviePage} />
+          <Route path="/signup" component={SignupPage} />
           <Route path="" component={NotFoundPage} />
         </Switch>
         <GlobalStyle />

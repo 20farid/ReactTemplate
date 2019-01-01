@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
+import { Helmet } from 'react-helmet';
 
 import ImageList from 'components/ImageList';
 import { loadConfig, loadMovies } from 'redux/actions/movies';
@@ -102,6 +103,9 @@ class MoviePage extends Component {
     if (loading == true && config !== undefined) return null;
     return (
       <div>
+        <Helmet titleTemplate="Okezone qqqq" defaultTitle="Okezone qqqq">
+          <meta name="description" content="Okezone qqqq" />
+        </Helmet>
         <SLiderContent results={results.slice(0, 5)} config={config} />
         <ul className="list">
           <ImageList images={results} config={config} />
