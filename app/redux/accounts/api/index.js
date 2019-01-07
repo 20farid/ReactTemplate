@@ -1,8 +1,28 @@
 const URL = 'http://localhost:8080';
 
+const postLogin = ({ username, password }) => {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    },
+    body: JSON.stringify({ username, password })
+  };
+
+  return fetch(`${URL}/login`, requestOptions)
+    .then( user => {
+      if(user.token){
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+
+      return user;
+    });
+}
+
 const postSignup = user => {
   const requestOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*"

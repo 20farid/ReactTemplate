@@ -83,6 +83,15 @@ class SignupPage extends React.Component {
 
           </InputText>
 
+          <InputText
+            name="test"
+            required="false"
+            value={user.test}>
+
+            <input type="text" className="form-control" name="test" value={user.test} onChange={this.handleChange} />
+
+          </InputText>
+
           <div className="form-group">
             <button className="btn btn-primary">Register</button>
             <Link to="/login" className="btn btn-link">Cancel</Link>
