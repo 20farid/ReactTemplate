@@ -3,7 +3,13 @@ const REGISTER = {
     SUCCESS : 'REGISTER_SUCCESS',
     FAIL : 'REGISTER_FAIL'
 };
+const LOGIN = {
+    REQUEST : 'LOGIN_REQUEST',
+    SUCCESS : 'LOGIN_SUCCESS',
+    FAIL : 'LOGIN_FAIL'
+};
 
 export {
-  REGISTER
+  REGISTER,
+  LOGIN
 };
