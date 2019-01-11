@@ -12,6 +12,7 @@ import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import { imagesReducer } from './reducers/imagesReducer';
 import { detailReducer } from './reducers/detailReducer';
 import { registration } from 'redux/accounts/reducers/register';
+import { login } from 'redux/accounts/reducers/login';
 // import { moviesDetailReducer } from './reducers/movies/moviesDetailReducer';
 // import { moviesReducer } from './reducers/movies/moviesReducer';
 import moviesRoot from './reducers/movies';
@@ -34,6 +35,7 @@ export default function createReducer(injectedReducers = {}) {
     detail: detailReducer,
     movies: moviesRoot,
     registration: registration,
+    login: login,
     ...injectedReducers,
   });
 

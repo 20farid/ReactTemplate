@@ -1,13 +1,13 @@
 const URL = 'http://localhost:8080';
 
-const postLogin = ({ username, password }) => {
+const postLogin = (user) => {
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*"
     },
-    body: JSON.stringify({ username, password })
+    body: JSON.stringify(user)
   };
 
   return fetch(`${URL}/login`, requestOptions)
@@ -70,5 +70,6 @@ const handleResponse = response => {
 }
 
 export {
-  postSignup
+  postSignup,
+  postLogin
 };

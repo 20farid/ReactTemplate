@@ -3,7 +3,8 @@ import { LOGIN } from '../constants';
 
 export const initState = fromJS({
   loggingIn: false,
-  status: false
+  status: false,
+  error: ''
 });
 
 const login = ( state = initState, action ) => {
@@ -13,9 +14,11 @@ const login = ( state = initState, action ) => {
         .set('loggingIn', true);
     case LOGIN.SUCCESS:
       return state
+        .set('status', action.status)
         .set('loggingIn', false);
     case LOGIN.FAIL:
-      return {};
+      return state
+        .set('error', action.error);
     default:
       return state
   }

@@ -19,6 +19,7 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 // Accounts component
 import SignupPage from 'containers/account/SignUp';
+import LoginPage from 'containers/account/Login';
 
 
 import GlobalStyle from '../../global-styles';
@@ -56,6 +57,7 @@ export default function App() {
           <Route path="/mov" component={MovieInfinite} />
           <Route path="/movies" component={MoviePage} />
           <Route path="/signup" component={SignupPage} />
+          <Route path="/login" component={LoginPage} />
           <Route path="" component={NotFoundPage} />
         </Switch>
         <GlobalStyle />

@@ -1,5 +1,4 @@
 /**
- *
  * Account
  *  _Register
  */
@@ -20,8 +19,7 @@ class SignupPage extends React.Component {
     this.state = {
       user: {
         email: '',
-        password: '',
-        test:''
+        password: ''
       },
       submitted: false,
       status: false
@@ -60,7 +58,7 @@ class SignupPage extends React.Component {
     return(
       <div className="">
         {status ? <div>{status}</div> : ''}
-        <form name="form" onSubmit={this.handleSubmit}>
+        <form name="register" onSubmit={this.handleSubmit}>
           <InputText
             name="email"
             required="true"
@@ -68,7 +66,7 @@ class SignupPage extends React.Component {
             act={(submitted && !user.email ? 'has-eror' : '')}
             value={user.email}>
 
-            <input type="text" className="form-control" name="email" value={user.email} onChange={this.handleChange} />
+            <input type="email" className="form-control" name="email" value={user.email} onChange={this.handleChange} />
 
           </InputText>
 
@@ -79,18 +77,10 @@ class SignupPage extends React.Component {
             act={(submitted && !user.password ? 'has-eror' : '')}
             value={user.password}>
 
-            <input type="text" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
+            <input type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
 
           </InputText>
 
-          <InputText
-            name="test"
-            required="false"
-            value={user.test}>
-
-            <input type="text" className="form-control" name="test" value={user.test} onChange={this.handleChange} />
-
-          </InputText>
 
           <div className="form-group">
             <button className="btn btn-primary">Register</button>
